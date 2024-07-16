@@ -4,6 +4,8 @@ import { InviteGuestsModal } from './invite-guests-modal'
 import { ConfirmTripModal } from './confirmTripModal'
 import { DestinationAndDateStep } from './steps/destination-and-date-step'
 import { InviteGuestsStep } from './steps/invite-guests-step'
+import { DateRange } from 'react-day-picker'
+import { api } from '../../lib/axios'
 
 export function CreateTripPage() {
   const navigate = useNavigate()
@@ -11,6 +13,13 @@ export function CreateTripPage() {
   const [isGuestInputOpen, setIsGuestInputOpen] = useState(false)
   const [isGuestModalOpen, setIsGuestModalOpen] = useState(false)
   const [isConfirmTripModalOpen, setIsConfirmTripModalOpen] = useState(false)
+
+  const [destination, setDestination] = useState('')
+  const [ownerName, setOwnerName] = useState('')
+  const [ownerEmail, setOwnerEmail] = useState('')
+  const [eventStartandEndDates, setEventStartandEndDates] = useState<
+    DateRange | undefined
+  >()
 
   const [emailsToInvite, setEmailsToInvite] = useState(['gh63388@gmail.com'])
 
@@ -67,6 +76,19 @@ export function CreateTripPage() {
   function createTrip(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    console.log(destination)
+    console.log(ownerName)
+    console.log(ownerEmail)
+
+    api.post('/trips', {
+      destination: '',
+      starts_at: '',
+      ends_at: '',
+      emails_to_invite: [''],
+      owner_name: '',
+      owner_email: '',
+    })
+
     navigate('/trips/1')
   }
 
@@ -85,6 +107,9 @@ export function CreateTripPage() {
             closeGuestInput={closeGuestInput}
             openGuestInput={openGuestInput}
             isGuestInputOpen={isGuestInputOpen}
+            setDestination={setDestination}
+            eventStartandEndDates={eventStartandEndDates}
+            setEventStartandEndDates={setEventStartandEndDates}
           />
 
           {isGuestInputOpen && (
@@ -122,6 +147,8 @@ export function CreateTripPage() {
         <ConfirmTripModal
           closeConfirmTripModal={closeConfirmTripModal}
           createTrip={createTrip}
+          setOwnerName={setOwnerName}
+          setOwnerEmail={setOwnerEmail}
         />
       )}
     </div>
